@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace MovieRental.Customer
 {
@@ -8,6 +9,8 @@ namespace MovieRental.Customer
         [Key]
         public int Id { get; set; }
         public required string CustomerName { get; set; }
+
+        [JsonIgnore]
         public ICollection<Rental.Rental> Rentals { get; set; } = new List<Rental.Rental>();
     }
 }

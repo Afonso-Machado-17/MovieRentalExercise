@@ -6,6 +6,7 @@ namespace MovieRental.Data
 {
 	public class MovieRentalDbContext : DbContext
 	{
+		public DbSet<Customer.Customer> Customers { get; set; }
 		public DbSet<Movie.Movie> Movies { get; set; }
 		public DbSet<Rental.Rental> Rentals { get; set; }
 
@@ -20,5 +21,14 @@ namespace MovieRental.Data
 
 		protected override void OnConfiguring(DbContextOptionsBuilder options)
 			=> options.UseSqlite($"Data Source={DbPath}");
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.Entity<Rental.Rental>()
+				.HasOne(r => r.Customer)
+				.WithMany(c => c.Rentals)
+				.HasForeignKey(r => r.CustomerId)
+				.OnDelete(DeleteBehavior.Restrict);
+		}
 	}
 }
